@@ -1,0 +1,41 @@
+{
+  "name": "sdf-manager",
+  "version": "0.0.0",
+  "description": "Load, parse, and cache Mapbox glyph SDFs, and construct glyph atlases",
+  "files": [
+    "dist",
+    "src"
+  ],
+  "main": "dist/sdf-manager.bundle.js",
+  "module": "src/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "rollup -c build/rollup.config.js",
+    "postversion": "git push && git push --tags"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/GlobeletJS/sdf-manager.git"
+  },
+  "keywords": [
+    "text",
+    "glyph",
+    "sdf",
+    "atlas"
+  ],
+  "author": "Jeshurun Hembd",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/GlobeletJS/sdf-manager/issues"
+  },
+  "homepage": "https://github.com/GlobeletJS/sdf-manager#readme",
+  "dependencies": {
+    "pbf": "^3.2.1",
+    "potpack": "^1.0.1"
+  },
+  "devDependencies": {
+    "rollup": "^2.16.1",
+    "rollup-plugin-commonjs": "^10.1.0",
+    "rollup-plugin-node-resolve": "^5.2.0"
+  }
+}
