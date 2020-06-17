@@ -6,7 +6,7 @@ export const GLYPH_PBF_BORDER = 3;
 export function parseGlyphPbf(data) {
   // See mapbox-gl-js/src/style/parse_glyph_pbf.js
   // Input is an ArrayBuffer, which will be read as a Uint8Array
-  return new Protobuf(data).readFields(readFontStacks, []);
+  return new Protobuf(data).readFields(readFontstacks, []);
 }
 
 function readFontstacks(tag, glyphs, pbf) {
