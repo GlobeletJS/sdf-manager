@@ -821,6 +821,7 @@
   }
 
   const GLYPH_PBF_BORDER = 3;
+  const ONE_EM = 24;
 
   function parseGlyphPbf(data) {
     // See mapbox-gl-js/src/style/parse_glyph_pbf.js
@@ -998,46 +999,54 @@
       };
   }
 
-  const padding = 1; // TODO: name is too general to be global?
+  const ATLAS_PADDING = 1;
 
   function buildAtlas(fonts) {
     // See mapbox-gl-js/src/render/glyph_atlas.js
 
-    // Collect all the glyph metrics, and add bitmap rectangles
-    const positions = {};
-    const rects = []; // Temporary list of links to positions[font][id].rect
-    Object.keys(fonts).forEach(font => {
-      let fontPos = positions[font] = {};
-      let glyphs = Object.values(fonts[font]);
-      glyphs.forEach(glyph => addGlyphRect(glyph, fontPos, rects));
-    });
+    // Construct position objects (metrics and rects) for each glyph
+    const positions = Object.entries(fonts)
+      .reduce((pos, [font, glyphs]) => {
+        pos[font] = getPositions(glyphs);
+        return pos;
+      }, {});
 
     // Figure out how to pack all the bitmaps into one image
     // NOTE: modifies the rects in the positions object, in place!
+    const rects = Object.values(positions)
+      .map(fontPos => Object.values(fontPos))
+      .flat()
+      .map(p => p.rect);
     const { w, h } = potpack(rects);
 
     // Using the updated rects, copy all the bitmaps into one image
     const image = new AlphaImage({ width: w || 1, height: h || 1 });
-    Object.keys(fonts).forEach(font => {
+    Object.entries(fonts).forEach(([font, glyphs]) => {
       let fontPos = positions[font];
-      let glyphs = Object.values(fonts[font]);
       glyphs.forEach(glyph => copyGlyphBitmap(glyph, fontPos, image));
     });
 
     return { image, positions };
   }
 
-  function addGlyphRect(glyph, positions, rects) {
-    let { id, bitmap: { width, height }, metrics } = glyph;
+  function getPositions(glyphs) {
+    return glyphs.reduce((dict, glyph) => {
+      let pos = getPosition(glyph);
+      if (pos) dict[glyph.id] = pos;
+      return dict;
+    }, {});
+  }
+
+  function getPosition(glyph) {
+    let { bitmap: { width, height }, metrics } = glyph;
     if (width === 0 || height === 0) return;
 
     // Construct a preliminary rect, positioned at the origin for now
-    let w = width + 2 * padding;
-    let h = height + 2 * padding;
+    let w = width + 2 * ATLAS_PADDING;
+    let h = height + 2 * ATLAS_PADDING;
     let rect = { x: 0, y: 0, w, h };
 
-    positions[id] = { rect, metrics };
-    rects.push(rect);
+    return { metrics, rect };
   }
 
   function copyGlyphBitmap(glyph, positions, image) {
@@ -1047,7 +1056,7 @@
 
     let srcPt = { x: 0, y: 0 };
     let { x, y } = position.rect;
-    let dstPt = { x: x + padding, y: y + padding };
+    let dstPt = { x: x + ATLAS_PADDING, y: y + ATLAS_PADDING };
     AlphaImage.copy(bitmap, image, srcPt, dstPt, bitmap);
   }
 
@@ -1060,11 +1069,10 @@
       const fontGlyphs = {};
 
       Object.entries(fonts).forEach(([font, codes]) => {
-        const glyphs = fontGlyphs[font] = {};
+        const glyphs = fontGlyphs[font] = [];
         codes.forEach(code => {
-          let request = getGlyph(font, code).then(glyph => { 
-            glyphs[code] = glyph;
-          });
+          let request = getGlyph(font, code)
+            .then(glyph => glyphs.push(glyph));
           promises.push(request);
         });
       });
@@ -1075,6 +1083,9 @@
     };
   }
 
+  exports.ATLAS_PADDING = ATLAS_PADDING;
+  exports.GLYPH_PBF_BORDER = GLYPH_PBF_BORDER;
+  exports.ONE_EM = ONE_EM;
   exports.initGetter = initGetter;
 
   Object.defineProperty(exports, '__esModule', { value: true });

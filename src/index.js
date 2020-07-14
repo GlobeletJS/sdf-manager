@@ -1,6 +1,9 @@
 import { initGlyphCache } from "./cache.js";
 import { buildAtlas } from "./atlas.js";
 
+export { GLYPH_PBF_BORDER, ONE_EM } from "./glyph-pbf.js";
+export { ATLAS_PADDING } from "./atlas.js";
+
 export function initGetter(urlTemplate, key) {
   const getGlyph = initGlyphCache(urlTemplate, key);
 
@@ -10,11 +13,10 @@ export function initGetter(urlTemplate, key) {
     const fontGlyphs = {};
 
     Object.entries(fonts).forEach(([font, codes]) => {
-      const glyphs = fontGlyphs[font] = {};
+      const glyphs = fontGlyphs[font] = [];
       codes.forEach(code => {
-        let request = getGlyph(font, code).then(glyph => { 
-          glyphs[code] = glyph;
-        });
+        let request = getGlyph(font, code)
+          .then(glyph => glyphs.push(glyph));
         promises.push(request);
       });
     });

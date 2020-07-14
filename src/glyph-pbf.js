@@ -2,6 +2,7 @@ import Protobuf from 'pbf';
 import { AlphaImage } from "./alpha-image.js";
 
 export const GLYPH_PBF_BORDER = 3;
+export const ONE_EM = 24;
 
 export function parseGlyphPbf(data) {
   // See mapbox-gl-js/src/style/parse_glyph_pbf.js
