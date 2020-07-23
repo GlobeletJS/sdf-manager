@@ -1,10 +1,7 @@
 import { parseGlyphPbf } from "./glyph-pbf.js";
 
-export function initGlyphCache(urlTemplate, key) {
+export function initGlyphCache(endpoint) {
   const fonts = {};
-
-  // TODO: Check if urlTemplate is valid?
-  const endpoint = urlTemplate.replace('{key}', key);
 
   function getBlock(font, range) {
     const first = range * 256;
