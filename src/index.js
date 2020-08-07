@@ -19,17 +19,15 @@ export function initGetter(urlTemplate, key) {
 
   const getGlyph = initGlyphCache(endpoint);
 
-  return function(fonts) {
-    // fonts = { font1: [code1, code2...], font2: ... }
-    const promises = [];
+  return function(fontCodes) {
+    // fontCodes = { font1: [code1, code2...], font2: ... }
     const fontGlyphs = {};
 
-    Object.entries(fonts).forEach(([font, codes]) => {
-      const glyphs = fontGlyphs[font] = [];
-      codes.forEach(code => {
-        let request = getGlyph(font, code)
-          .then(glyph => glyphs.push(glyph));
-        promises.push(request);
+    const promises = Object.entries(fontCodes).map(([font, codes]) => {
+      let requests = Array.from(codes, code => getGlyph(font, code));
+
+      return Promise.all(requests).then(glyphs => {
+        fontGlyphs[font] = glyphs.filter(g => g !== undefined);
       });
     });
 

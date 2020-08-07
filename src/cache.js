@@ -11,9 +11,9 @@ export function initGlyphCache(endpoint) {
       .replace('{range}', first + "-" + last);
 
     return fetch(href)
-      .then( getArrayBuffer )
-      .then( parseGlyphPbf  )
-      .then( makeGlyphDict  );
+      .then(getArrayBuffer)
+      .then(parseGlyphPbf)
+      .then(glyphs => glyphs.reduce((d, g) => (d[g.id] = g, d), {}));
   }
 
   return function(font, code) {
@@ -26,6 +26,7 @@ export function initGlyphCache(endpoint) {
     const block = blocks[range] || (blocks[range] = getBlock(font, range));
 
     // 3. Return a Promise that resolves to the requested glyph
+    // NOTE: may be undefined! if the API returns a sparse or empty block
     return block.then(glyphs => glyphs[code]);
   };
 }
@@ -33,12 +34,4 @@ export function initGlyphCache(endpoint) {
 function getArrayBuffer(response) {
   if (!response.ok) throw Error(response.status + " " + response.statusText);
   return response.arrayBuffer();
-}
-
-function makeGlyphDict(glyphs) {
-  const glyphDict = {};
-  glyphs.forEach(glyph => {
-    glyphDict[glyph.id] = glyph;
-  });
-  return glyphDict;
 }

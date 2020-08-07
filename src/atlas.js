@@ -16,8 +16,7 @@ export function buildAtlas(fonts) {
   // Figure out how to pack all the bitmaps into one image
   // NOTE: modifies the rects in the positions object, in place!
   const rects = Object.values(positions)
-    .map(fontPos => Object.values(fontPos))
-    .flat()
+    .flatMap(fontPos => Object.values(fontPos))
     .map(p => p.rect);
   const { w, h } = potpack(rects);
 

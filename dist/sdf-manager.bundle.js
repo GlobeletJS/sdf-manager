@@ -870,9 +870,9 @@
         .replace('{range}', first + "-" + last);
 
       return fetch(href)
-        .then( getArrayBuffer )
-        .then( parseGlyphPbf  )
-        .then( makeGlyphDict  );
+        .then(getArrayBuffer)
+        .then(parseGlyphPbf)
+        .then(glyphs => glyphs.reduce((d, g) => (d[g.id] = g, d), {}));
     }
 
     return function(font, code) {
@@ -885,6 +885,7 @@
       const block = blocks[range] || (blocks[range] = getBlock(font, range));
 
       // 3. Return a Promise that resolves to the requested glyph
+      // NOTE: may be undefined! if the API returns a sparse or empty block
       return block.then(glyphs => glyphs[code]);
     };
   }
@@ -892,14 +893,6 @@
   function getArrayBuffer(response) {
     if (!response.ok) throw Error(response.status + " " + response.statusText);
     return response.arrayBuffer();
-  }
-
-  function makeGlyphDict(glyphs) {
-    const glyphDict = {};
-    glyphs.forEach(glyph => {
-      glyphDict[glyph.id] = glyph;
-    });
-    return glyphDict;
   }
 
   function potpack(boxes) {
@@ -1011,8 +1004,7 @@
     // Figure out how to pack all the bitmaps into one image
     // NOTE: modifies the rects in the positions object, in place!
     const rects = Object.values(positions)
-      .map(fontPos => Object.values(fontPos))
-      .flat()
+      .flatMap(fontPos => Object.values(fontPos))
       .map(p => p.rect);
     const { w, h } = potpack(rects);
 
@@ -1072,17 +1064,15 @@
 
     const getGlyph = initGlyphCache(endpoint);
 
-    return function(fonts) {
-      // fonts = { font1: [code1, code2...], font2: ... }
-      const promises = [];
+    return function(fontCodes) {
+      // fontCodes = { font1: [code1, code2...], font2: ... }
       const fontGlyphs = {};
 
-      Object.entries(fonts).forEach(([font, codes]) => {
-        const glyphs = fontGlyphs[font] = [];
-        codes.forEach(code => {
-          let request = getGlyph(font, code)
-            .then(glyph => glyphs.push(glyph));
-          promises.push(request);
+      const promises = Object.entries(fontCodes).map(([font, codes]) => {
+        let requests = Array.from(codes, code => getGlyph(font, code));
+
+        return Promise.all(requests).then(glyphs => {
+          fontGlyphs[font] = glyphs.filter(g => g !== undefined);
         });
       });
 
