@@ -8,9 +8,12 @@ export default [{
     resolve(),
     commonjs(),
   ],
+  external: [
+    ...Object.keys(pkg.peerDependencies || {})
+  ],
   output: {
     file: pkg.main,
-    format: 'umd',
+    format: 'esm',
     name: pkg.name,
   }
 }];

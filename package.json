@@ -29,12 +29,14 @@
     "url": "https://github.com/GlobeletJS/sdf-manager/issues"
   },
   "homepage": "https://github.com/GlobeletJS/sdf-manager#readme",
+  "peerDependencies": {
+    "pbf": "^3.2.1"
+  },
   "dependencies": {
-    "pbf": "^3.2.1",
     "potpack": "^1.0.1"
   },
   "devDependencies": {
-    "rollup": "^2.16.1",
+    "rollup": "^2.33.2",
     "rollup-plugin-commonjs": "^10.1.0",
     "rollup-plugin-node-resolve": "^5.2.0"
   }
