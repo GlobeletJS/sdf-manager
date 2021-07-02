@@ -1,9 +1,9 @@
 # sdf-manager
 
-Load, parse, and cache Mapbox glyph SDFs, and construct glyph atlases
+Load, parse, and cache MapLibre glyph SDFs, and construct glyph atlases
 
 The code follows the same strategy as the glyph management in
-[mapbox-gl-js](https://github.com/mapbox/mapbox-gl-js).
+[MapLibre-GL](https://github.com/maplibre/maplibre-gl-js).
 sdf-manager simply pulls out this part of the code and modularizes it.
 
 ## Installation
@@ -18,7 +18,7 @@ const getGlyphs = sdfManager.initGetter(urlTemplate, key);
 ```
 
 The `urlTemplate` must follow the pattern described in the
-[Mapbox documentation](https://docs.mapbox.com/mapbox-gl-js/style-spec/glyphs/).
+[MapLibre documentation](https://maplibre.org/maplibre-gl-js-docs/style-spec/glyphs/).
 The `key` is your API key to access the SDF server.
 
 The returned `getGlyphs` function has the following syntax:
