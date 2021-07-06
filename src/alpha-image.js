@@ -1,5 +1,5 @@
 export class AlphaImage {
-  // See mapbox-gl-js/src/util/image.js
+  // See maplibre-gl-js/src/util/image.js
   constructor(size, data) {
     createImage(this, size, 1, data);
   }
@@ -24,7 +24,7 @@ function createImage(image, { width, height }, channels, data) {
   if (!data) {
     data = new Uint8Array(width * height * channels);
   } else if (data.length !== width * height * channels) {
-    throw new RangeError('mismatched image size');
+    throw new RangeError("mismatched image size");
   }
   return Object.assign(image, { width, height, data });
 }
@@ -32,7 +32,7 @@ function createImage(image, { width, height }, channels, data) {
 function resizeImage(image, { width, height }, channels) {
   if (width === image.width && height === image.height) return;
 
-  const size = { 
+  const size = {
     width: Math.min(image.width, width),
     height: Math.min(image.height, height),
   };
@@ -48,10 +48,10 @@ function copyImage(srcImg, dstImg, srcPt, dstPt, size, channels) {
   if (size.width === 0 || size.height === 0) return dstImg;
 
   if (outOfRange(srcPt, size, srcImg)) {
-    throw new RangeError('out of range source coordinates for image copy');
+    throw new RangeError("out of range source coordinates for image copy");
   }
   if (outOfRange(dstPt, size, dstImg)) {
-    throw new RangeError('out of range destination coordinates for image copy');
+    throw new RangeError("out of range destination coordinates for image copy");
   }
 
   const srcData = srcImg.data;

@@ -14,7 +14,7 @@ export function initGetter(urlTemplate, key) {
 
   // Put in the API key, if supplied
   const endpoint = (key)
-    ? urlTemplate.replace('{key}', key)
+    ? urlTemplate.replace("{key}", key)
     : urlTemplate;
 
   const getGlyph = initGlyphCache(endpoint);

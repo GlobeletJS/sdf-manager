@@ -1,7 +1,7 @@
 {
   "name": "sdf-manager",
   "version": "0.0.7",
-  "description": "Load, parse, and cache Mapbox glyph SDFs, and construct glyph atlases",
+  "description": "Load, parse, and cache MapLibre glyph SDFs, and construct glyph atlases",
   "files": [
     "dist",
     "src"
@@ -9,8 +9,9 @@
   "main": "dist/sdf-manager.bundle.js",
   "module": "src/index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "lint": "eslint src",
     "build": "rollup -c build/rollup.config.js",
+    "test": "npm run lint",
     "postversion": "git push && git push --tags"
   },
   "repository": {
@@ -38,6 +39,8 @@
   "devDependencies": {
     "@rollup/plugin-commonjs": "^19.0.0",
     "@rollup/plugin-node-resolve": "^13.0.0",
-    "rollup": "^2.33.2"
+    "eslint": "^7.30.0",
+    "eslint-config-globeletjs": "^0.0.3",
+    "rollup": "^2.52.7"
   }
 }

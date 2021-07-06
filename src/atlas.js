@@ -1,10 +1,10 @@
-import potpack from 'potpack';
+import potpack from "potpack";
 import { AlphaImage } from "./alpha-image.js";
 
 export const ATLAS_PADDING = 1;
 
 export function buildAtlas(fonts) {
-  // See mapbox-gl-js/src/render/glyph_atlas.js
+  // See maplibre-gl-js/src/render/glyph_atlas.js
 
   // Construct position objects (metrics and rects) for each glyph
   const positions = Object.entries(fonts)
@@ -51,7 +51,7 @@ function getPosition(glyph) {
 }
 
 function copyGlyphBitmap(glyph, positions, image) {
-  let { id, bitmap, metrics } = glyph;
+  let { id, bitmap } = glyph;
   let position = positions[id];
   if (!position) return;
 

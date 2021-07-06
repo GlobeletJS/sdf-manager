@@ -1,7 +1,7 @@
 import Protobuf from 'pbf';
 
 class AlphaImage {
-  // See mapbox-gl-js/src/util/image.js
+  // See maplibre-gl-js/src/util/image.js
   constructor(size, data) {
     createImage(this, size, 1, data);
   }
@@ -26,7 +26,7 @@ function createImage(image, { width, height }, channels, data) {
   if (!data) {
     data = new Uint8Array(width * height * channels);
   } else if (data.length !== width * height * channels) {
-    throw new RangeError('mismatched image size');
+    throw new RangeError("mismatched image size");
   }
   return Object.assign(image, { width, height, data });
 }
@@ -34,7 +34,7 @@ function createImage(image, { width, height }, channels, data) {
 function resizeImage(image, { width, height }, channels) {
   if (width === image.width && height === image.height) return;
 
-  const size = { 
+  const size = {
     width: Math.min(image.width, width),
     height: Math.min(image.height, height),
   };
@@ -50,10 +50,10 @@ function copyImage(srcImg, dstImg, srcPt, dstPt, size, channels) {
   if (size.width === 0 || size.height === 0) return dstImg;
 
   if (outOfRange(srcPt, size, srcImg)) {
-    throw new RangeError('out of range source coordinates for image copy');
+    throw new RangeError("out of range source coordinates for image copy");
   }
   if (outOfRange(dstPt, size, dstImg)) {
-    throw new RangeError('out of range destination coordinates for image copy');
+    throw new RangeError("out of range destination coordinates for image copy");
   }
 
   const srcData = srcImg.data;
@@ -89,7 +89,7 @@ const GLYPH_PBF_BORDER = 3;
 const ONE_EM = 24;
 
 function parseGlyphPbf(data) {
-  // See mapbox-gl-js/src/style/parse_glyph_pbf.js
+  // See maplibre-gl-js/src/style/parse_glyph_pbf.js
   // Input is an ArrayBuffer, which will be read as a Uint8Array
   return new Protobuf(data).readFields(readFontstacks, []);
 }
@@ -131,8 +131,8 @@ function initGlyphCache(endpoint) {
     const first = range * 256;
     const last = first + 255;
     const href = endpoint
-      .replace('{fontstack}', font.split(" ").join("%20"))
-      .replace('{range}', first + "-" + last);
+      .replace("{fontstack}", font.split(" ").join("%20"))
+      .replace("{range}", first + "-" + last);
 
     return fetch(href)
       .then(getArrayBuffer)
@@ -142,7 +142,7 @@ function initGlyphCache(endpoint) {
 
   return function(font, code) {
     // 1. Find the 256-char block containing this code
-    if (code > 65535) throw Error('glyph codes > 65535 not supported');
+    if (code > 65535) throw Error("glyph codes > 65535 not supported");
     const range = Math.floor(code / 256);
 
     // 2. Get the Promise for the retrieval and parsing of the block
@@ -257,7 +257,7 @@ function potpack(boxes) {
 const ATLAS_PADDING = 1;
 
 function buildAtlas(fonts) {
-  // See mapbox-gl-js/src/render/glyph_atlas.js
+  // See maplibre-gl-js/src/render/glyph_atlas.js
 
   // Construct position objects (metrics and rects) for each glyph
   const positions = Object.entries(fonts)
@@ -304,7 +304,7 @@ function getPosition(glyph) {
 }
 
 function copyGlyphBitmap(glyph, positions, image) {
-  let { id, bitmap, metrics } = glyph;
+  let { id, bitmap } = glyph;
   let position = positions[id];
   if (!position) return;
 
@@ -324,7 +324,7 @@ function initGetter(urlTemplate, key) {
 
   // Put in the API key, if supplied
   const endpoint = (key)
-    ? urlTemplate.replace('{key}', key)
+    ? urlTemplate.replace("{key}", key)
     : urlTemplate;
 
   const getGlyph = initGlyphCache(endpoint);

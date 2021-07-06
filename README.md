@@ -6,6 +6,8 @@ The code follows the same strategy as the glyph management in
 [MapLibre-GL](https://github.com/maplibre/maplibre-gl-js).
 sdf-manager simply pulls out this part of the code and modularizes it.
 
+![tests](https://github.com/GlobeletJS/sdf-manager/actions/workflows/node.js.yml/badge.svg)
+
 ## Installation
 vector-map is provided as an ESM import
 ```javascript
