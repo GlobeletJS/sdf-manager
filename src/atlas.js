@@ -23,7 +23,7 @@ export function buildAtlas(fonts) {
   // Using the updated rects, copy all the bitmaps into one image
   const image = new AlphaImage({ width: w || 1, height: h || 1 });
   Object.entries(fonts).forEach(([font, glyphs]) => {
-    let fontPos = positions[font];
+    const fontPos = positions[font];
     glyphs.forEach(glyph => copyGlyphBitmap(glyph, fontPos, image));
   });
 
@@ -32,31 +32,31 @@ export function buildAtlas(fonts) {
 
 function getPositions(glyphs) {
   return glyphs.reduce((dict, glyph) => {
-    let pos = getPosition(glyph);
+    const pos = getPosition(glyph);
     if (pos) dict[glyph.id] = pos;
     return dict;
   }, {});
 }
 
 function getPosition(glyph) {
-  let { bitmap: { width, height }, metrics } = glyph;
+  const { bitmap: { width, height }, metrics } = glyph;
   if (width === 0 || height === 0) return;
 
   // Construct a preliminary rect, positioned at the origin for now
-  let w = width + 2 * ATLAS_PADDING;
-  let h = height + 2 * ATLAS_PADDING;
-  let rect = { x: 0, y: 0, w, h };
+  const w = width + 2 * ATLAS_PADDING;
+  const h = height + 2 * ATLAS_PADDING;
+  const rect = { x: 0, y: 0, w, h };
 
   return { metrics, rect };
 }
 
 function copyGlyphBitmap(glyph, positions, image) {
-  let { id, bitmap } = glyph;
-  let position = positions[id];
+  const { id, bitmap } = glyph;
+  const position = positions[id];
   if (!position) return;
 
-  let srcPt = { x: 0, y: 0 };
-  let { x, y } = position.rect;
-  let dstPt = { x: x + ATLAS_PADDING, y: y + ATLAS_PADDING };
+  const srcPt = { x: 0, y: 0 };
+  const { x, y } = position.rect;
+  const dstPt = { x: x + ATLAS_PADDING, y: y + ATLAS_PADDING };
   AlphaImage.copy(bitmap, image, srcPt, dstPt, bitmap);
 }

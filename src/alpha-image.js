@@ -74,7 +74,7 @@ function copyImage(srcImg, dstImg, srcPt, dstPt, size, channels) {
 }
 
 function outOfRange(point, size, image) {
-  let { width, height } = size;
+  const { width, height } = size;
   return (
     width > image.width ||
     height > image.height ||

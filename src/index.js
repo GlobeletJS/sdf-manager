@@ -24,7 +24,7 @@ export function initGetter(urlTemplate, key) {
     const fontGlyphs = {};
 
     const promises = Object.entries(fontCodes).map(([font, codes]) => {
-      let requests = Array.from(codes, code => getGlyph(font, code));
+      const requests = Array.from(codes, code => getGlyph(font, code));
 
       return Promise.all(requests).then(glyphs => {
         fontGlyphs[font] = glyphs.filter(g => g !== undefined);
