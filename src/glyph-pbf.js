@@ -1,4 +1,4 @@
-import Protobuf from "pbf";
+import Protobuf from "pbf-esm";
 import { AlphaImage } from "./alpha-image.js";
 
 export const GLYPH_PBF_BORDER = 3;

@@ -6,7 +6,7 @@
     "dist",
     "src"
   ],
-  "main": "dist/sdf-manager.bundle.js",
+  "main": "dist/sdf-manager.js",
   "module": "src/index.js",
   "scripts": {
     "lint": "eslint src",
@@ -30,17 +30,16 @@
     "url": "https://github.com/GlobeletJS/sdf-manager/issues"
   },
   "homepage": "https://github.com/GlobeletJS/sdf-manager#readme",
-  "peerDependencies": {
-    "pbf": "^3.2.1"
-  },
   "dependencies": {
     "potpack": "^1.0.1"
   },
   "devDependencies": {
-    "@rollup/plugin-commonjs": "^19.0.0",
     "@rollup/plugin-node-resolve": "^13.0.0",
     "eslint": "^7.30.0",
     "eslint-config-globeletjs": "^0.0.6",
     "rollup": "^2.52.7"
+  },
+  "peerDependencies": {
+    "pbf-esm": "^4.0.1"
   }
 }
